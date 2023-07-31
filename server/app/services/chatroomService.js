@@ -29,8 +29,3 @@ const createChatroomService = (name, userData) => {
 module.exports = {
   createChatroomService,
 };
-
-
-module.exports = {
-  createChatroomService,
-};

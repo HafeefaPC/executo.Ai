@@ -1,4 +1,3 @@
-
 const connection = require('../../config/dbConfig');
 const userModel = require('./userModel')
 
@@ -51,7 +50,7 @@ function getChatroomByName(name) {
 function insertMessage(userId,message,idRoom) {
   return new Promise((resolve, reject) => {
     // Perform the necessary database query to insert a new message
-    const query = 'INSERT INTO groupchat (user_id, message,room_id, message_sent) VALUES (?, ?,?, NOW())';
+    const query = 'INSERT INTO groupchat (sender_id, message,chatroom_id, message_sent) VALUES (?, ?,?, NOW())';
     connection.promise().query(query, [userId, message,idRoom])
       .then(([result]) => {
         const newMessage = {
