@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Import Axios
 import { useParams, useLocation } from 'react-router-dom';
+import getUserProfile from '../../data/user';
 import './chat.css';
 
 function Chats() {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState(null);
   const { roomId } = useParams(); // Get the chatroomName from the URL
   const userData = JSON.parse(localStorage.getItem('userData'));
   const phn = userData.phoneNumber
@@ -14,6 +16,29 @@ function Chats() {
   const location = useLocation();
   // Rest of your code...
   console.log("chatroomName", roomId)
+
+  useEffect(() => {
+    // Call the getUserProfile function and pass the phoneNumber as an argument
+    const phoneNumber = '+919999999999'; // Replace with the actual phone number
+    async function getUserProfile(phoneNumber) {
+      try {
+        const response = await axios.get('http://localhost:3000/readuser', {
+          params: {
+            phoneNumber: phoneNumber
+          }
+        });
+        const userData = response.data;
+        setUser(userData);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+        // Handle errors if needed
+      }
+    }
+
+    getUserProfile(phoneNumber);
+  }, []);
+  console.log("userrrrrrrrr",user)
+
 
   const handleExitChat = async () => {
     try {
@@ -52,10 +77,12 @@ function Chats() {
   const fetchMessages = async () => {
     try {
       console.log("messages", messages);
+      console.log("rooooooooooom",roomId)
       setIsLoading(true); // Show loading state
       const response = await axios.get('http://localhost:3000/messages', {
+      params: {
         roomId: roomId,
-      }); // Use Axios for GET request
+      },}) // Use Axios for GET request
       const data = response.data; // Axios response data is stored in the 'data' property
       setMessages(data.messages);
       setIsLoading(false); // Hide loading state
@@ -65,11 +92,6 @@ function Chats() {
     }
   };
 
-  const getPhoneNumber = () => {
-    // Get the phone number from localStorage
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    return userData?.phoneNumber || ''; // Return an empty string if userData is not available
-  };
 
   const sendMessage = async () => {
     try {
@@ -81,6 +103,7 @@ function Chats() {
       const newMessage = response.data; // Axios response data is stored in the 'data' property
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInputMessage(''); // Clear the input field after sending the message
+      fetchMessages()
     } catch (error) {
       console.error('Error sending message:', error);
       // Handle the error and provide feedback to the user if needed
@@ -103,10 +126,10 @@ function Chats() {
               messages.map((message, index) => (
                 <div
                   key={index}
-                  className={message.userId === "uo" ? 'message my-message' : 'message other-message'}
+                  className={message.sender_id === user.id ? 'message my-message' : 'message other-message'}
                 >
                   <div className='rounded-3xl w-[100px]'>
-                    <div className='text-gray-400'>{message.userId}</div>
+                    <div className='text-gray-400'>{message.username}</div>
                     <div className='text'>{message.message}</div>
                   </div>
                 </div>

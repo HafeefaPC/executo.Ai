@@ -40,7 +40,7 @@ async function saveTaskInDatabase(task, goalID, day) {
 
 
 
-async function createGoalInDatabase(goal, day, userId ) {
+async function createGoalInDatabase(goal, day, userId) {
   return new Promise((resolve, reject) => {
     const selectSql = 'SELECT id FROM goals WHERE goal_name = ?'
     const selectValues = [goal]
@@ -55,7 +55,7 @@ async function createGoalInDatabase(goal, day, userId ) {
         } else {
           // Goal doesn't exist, insert it into the database
           const insertSql = 'INSERT INTO goals (goal_name, duration, start_date,user_id) VALUES (?, ?, ?,?)';
-          const insertValues = [goal, day, new Date() , userId];
+          const insertValues = [goal, day, new Date(), userId];
 
           connection.query(insertSql, insertValues, (insertError, insertResults) => {
             if (insertError) {
@@ -74,28 +74,28 @@ async function createGoalInDatabase(goal, day, userId ) {
 async function generateOpenAIResponse(req, res) {
   try {
     const { goal, day, phn } = req.body;
-    const user =await getUserByPhoneNumber(phn);
-    const userId=user.id;
+    const user = await getUserByPhoneNumber(phn);
+    const userId = user.id;
     let goalID;
     // Call the OpenAI service function
     const response = await callOpenAI(goal, day);
-//     goal && day && createGoalInDatabase(goal,day)
-//     const selectSql = 'SELECT id FROM goals WHERE goal_name = ?';
-// const selectValues = [goal];
-// connection.query(selectSql, selectValues, (selectError, selectResults) => {
-//   if (selectError) {
-//     reject(selectError);
-//   } else {
-//     if (selectResults.length > 0) {
-//       // Goal exists in the database, retrieve the goal ID
-//       goalID = selectResults[0].id;
-//       console.log("goalid",goalID)
-//     }
-//     // resolve(goalID);
-//   }
-// });
+    //     goal && day && createGoalInDatabase(goal,day)
+    //     const selectSql = 'SELECT id FROM goals WHERE goal_name = ?';
+    // const selectValues = [goal];
+    // connection.query(selectSql, selectValues, (selectError, selectResults) => {
+    //   if (selectError) {
+    //     reject(selectError);
+    //   } else {
+    //     if (selectResults.length > 0) {
+    //       // Goal exists in the database, retrieve the goal ID
+    //       goalID = selectResults[0].id;
+    //       console.log("goalid",goalID)
+    //     }
+    //     // resolve(goalID);
+    //   }
+    // });
     if (goal && day) {
-      goalID = await createGoalInDatabase(goal, day , userId); // Store the goal ID in the goalID variable
+      goalID = await createGoalInDatabase(goal, day, userId); // Store the goal ID in the goalID variable
     }
 
     // Log the OpenAI response 
@@ -107,31 +107,31 @@ async function generateOpenAIResponse(req, res) {
     // // Store the learning plan in the database
     // const goalId = await createGoalInDatabase(goal, day);
     // // console.log(response[0])
-    
-    for (const day  in data) {
+
+    for (const day in data) {
       // Access the tasks for the current day
       const tasks = data[day];
       console.log(day);
       // console.log(`Day: ${day}`);
       // Iterate over each task in the tasks array for the current day
-        tasks.forEach((task, index) => {
-        console.log("goalIDnte foreach",goalID)
-        tasks && saveTaskInDatabase(task,goalID,day)
+      tasks.forEach((task, index) => {
+        console.log("goalIDnte foreach", goalID)
+        tasks && saveTaskInDatabase(task, goalID, day)
         console.log(`${task}`)
       });
     }
     // for (let i = 0; i < data.length; i++) {
-      
-      // const tasks = data; // Get the tasks for the current day
-      // console.log(tasks)
-      // console.log('Day:', i + 1);
-      // console.log('Tasks:', tasks.join(', '));
 
-      // const taskDay = i + 1;
-      // for (let j = 0; j < tasks.length; j++) {
-      //   const task = tasks[j];
-      //   await saveTaskInDatabase(task, goalId, taskDay);
-      // }
+    // const tasks = data; // Get the tasks for the current day
+    // console.log(tasks)
+    // console.log('Day:', i + 1);
+    // console.log('Tasks:', tasks.join(', '));
+
+    // const taskDay = i + 1;
+    // for (let j = 0; j < tasks.length; j++) {
+    //   const task = tasks[j];
+    //   await saveTaskInDatabase(task, goalId, taskDay);
+    // }
     // }
 
     // Send the success response to the client

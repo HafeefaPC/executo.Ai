@@ -5,7 +5,8 @@ const userModel = require('../models/userModel')
 async function getAllMessages(req, res) {
   try {
     // Retrieve all messages from the database
-    const {roomId} = req.body
+    const roomId = req.query.roomId; 
+    console.log("roomdiddddd",roomId)
     const messages = await chatroomModel.getAllMessages(roomId);
 
     if (messages.length > 0) {
@@ -31,11 +32,12 @@ async function sendMessage(req, res) {
     }
     const user = await userModel.getUserByPhoneNumber(phoneNumber)
     const userId = user.id;
+    const username = user.name
     console.log(" user in chatcontr",user)
     const room = await chatroomModel.getChatroomByName(roomId)
     const idRoom = room.id;
     // Insert the new message into the database
-    const newMessage = await chatroomModel.insertMessage(userId, message, idRoom);
+    const newMessage = await chatroomModel.insertMessage(userId, message, idRoom,username);
 
     // Handle the new message as needed
     res.status(201).json(newMessage);

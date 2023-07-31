@@ -6,10 +6,10 @@ async function getAllMessages(roomId) {
   try {
     const room = await getChatroomByName(roomId);
     const idRoom = room.id;
-
+    console.log("roooooooooom",idRoom)
     return new Promise((resolve, reject) => {
       // Perform the necessary database query to retrieve messages for the specific roomId
-      const query = 'SELECT * FROM groupchat WHERE room_id = ?';
+      const query = 'SELECT * FROM groupchat WHERE chatroom_id = ?';
       connection.promise()
         .query(query, [idRoom])
         .then(([rows]) => {
@@ -29,11 +29,12 @@ async function getAllMessages(roomId) {
 
 
 // Function to get a chatroom by name
-function getChatroomByName(name) {
+function getChatroomByName(roomId) {
   return new Promise((resolve, reject) => {
     // Perform the necessary database query to get a chatroom by name
+    console
     const query = 'SELECT * FROM chatroom WHERE name = ?';
-    connection.promise().query(query, [name])
+    connection.promise().query(query, [roomId])
       .then(([rows]) => {
         const chatroom = rows.length ? rows[0] : null;
         console.log()
@@ -47,11 +48,11 @@ function getChatroomByName(name) {
 }
 
 // Function to insert a new message into the database
-function insertMessage(userId,message,idRoom) {
+function insertMessage(userId,message,idRoom,username) {
   return new Promise((resolve, reject) => {
     // Perform the necessary database query to insert a new message
-    const query = 'INSERT INTO groupchat (sender_id, message,chatroom_id, message_sent) VALUES (?, ?,?, NOW())';
-    connection.promise().query(query, [userId, message,idRoom])
+    const query = 'INSERT INTO groupchat (sender_id, message,chatroom_id, message_sent,username) VALUES (?, ?,?, NOW(),?)';
+    connection.promise().query(query, [userId, message,idRoom,username])
       .then(([result]) => {
         const newMessage = {
           id: result.insertId,
