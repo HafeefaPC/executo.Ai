@@ -12,6 +12,7 @@ import axios from 'axios';
 import profile2 from '../../assets/profile2.jpg';
 import { IoIosInformationCircle } from "react-icons/io";
 import {AiTwotoneMail} from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
 
 
 function Profile() {
@@ -22,6 +23,7 @@ function Profile() {
   const [isAddressEditing, setIsAddressEditing] = useState(false);
   const [newAddressText, setNewAddressText] = useState('');
   const [userDetails, setUserDetails] = useState(null);
+  const navigate = useNavigate()
 
   const handleEditAboutClick = () => {
     setIsEditing(true);
@@ -31,6 +33,24 @@ function Profile() {
   const handleSaveAboutClick = () => {
     setIsEditing(false);
     setAboutText(newAboutText);
+
+    // Perform the update request for 'about' variable in the 'users' table
+    const userId = userDetails?.id; // Replace 'id' with the actual property name containing the user ID
+    if (userId) {
+      axios
+        .put(`http://localhost:3000/updateUser`, {
+          id: userId,
+          about: aboutText,
+        })
+        .then((response) => {
+          console.log('About updated successfully:', response.data);
+          // Perform any additional actions, such as showing a success message
+        })
+        .catch((error) => {
+          console.error('Error updating about:', error);
+          // Perform any error handling, such as showing an error message
+        });
+    }
   };
 
   const handleCancelAboutClick = () => {
@@ -83,6 +103,32 @@ function Profile() {
       console.error('Error fetching user details:', error);
     });
   };
+
+  const handleLogout =()=>{
+    localStorage.removeItem('userData');
+    navigate('/')
+  }
+  const handleDelete = () => {
+    if (userDetails) {
+      const userId = userDetails.id; // Replace 'id' with the actual property name containing the user ID
+      axios
+        .delete(`http://localhost:3000/deleteUser`, {
+          params: { id: userId },
+        })
+        .then((response) => {
+          console.log('User deleted successfully:', response.data);
+          localStorage.removeItem('userData');
+          navigate('/')
+          // Perform any additional actions, such as showing a success message or redirecting the user
+        })
+        .catch((error) => {
+          console.error('Error deleting user:', error);
+          // Perform any error handling, such as showing an error message
+        });
+    }
+  };
+
+
 
   return (
     <>
@@ -150,22 +196,36 @@ function Profile() {
           ) : (
             <>
               <h2 className='font-semibold'>{addressText}</h2>
-              <img
+              {/* <img
                 src={edit}
                 alt='edit'
                 className='ml-[16rem] mt-[-1.5rem] mb-[1.5rem]'
                 onClick={handleEditAddressClick}
-              />
+              /> */}
             </>
           )}
         </div>
       </div>
+      <div className='flex flex-col justify-center items-start gap-3 ml-5'>
       <div className='flex flex-row'>
-        <h2 className='text-[#24806B] ml-[2rem] mt-[1rem]'>
+        <h2 className='text-[#24806B] ml-[1rem] mt-[1rem]'>
           Wohoo! You have 128 streaks currently, that's more than
 
         </h2>
         <img src={streak} alt='streak' className=''/>
+      </div>
+            <button
+            className="h-[52px] w-[335px] mt-5 rounded-lg font-bold font-inter bg-gray-300 text-[#FF0000] border border-gray-300"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+          <button
+            className="h-[52px] w-[335px] rounded-lg font-bold font-inter bg-red-500 text-white"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
       </div>
       <BottomNav />
     </>

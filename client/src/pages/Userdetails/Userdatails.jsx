@@ -3,6 +3,7 @@ import photo from '../../assets/photo.png';
 import './Userdetails.css';
 import axios from 'axios';
 import { AuthContext } from '../../context/Authcontext';
+import { useNavigate } from 'react-router-dom';
 
 function Userdetails() {
   const [name, setName] = useState('');
@@ -12,6 +13,7 @@ function Userdetails() {
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const navigate= useNavigate()
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -43,6 +45,7 @@ function Userdetails() {
         const newUserData = { ...items, name, email };
         localStorage.setItem('userData', JSON.stringify(newUserData));
         console.log(newUserData)
+        navigate('/home')
         // Handle the response from the backend if needed
       })
       .catch((error) => {
@@ -72,7 +75,7 @@ function Userdetails() {
         />
       </div>
       <div className='division'>
-        <h3 className='upload'>Upload your profile picture</h3>
+        {/* <h3 className='upload'>Upload your profile picture</h3> */}
         <input
           type='text'
           className='name'

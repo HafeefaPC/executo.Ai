@@ -8,20 +8,16 @@ function Landing() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if(userData.phoneNumber && userData.name){
+      if (userData && userData.phoneNumber && userData.name) {
         navigate('/home');
-      }
-      else if(userData.phoneNumber && !userData.name)
-      {
-        navigate('/userdetails')
-      }
-      else
-      {
-        navigate('/login')
+      } else if (userData && userData.phoneNumber && !userData.name) {
+        navigate('/userdetails');
+      } else {
+        navigate('/login');
       }
     }, 3000);
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, userData]);
 
   return (
     <div className="flex justify-center items-center h-screen">

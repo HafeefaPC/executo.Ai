@@ -1,15 +1,13 @@
-import React,{useState,useEffect} from 'react'
-import {BsFillBellFill} from 'react-icons/bs'
-import getUserProfile from '../../data/user'
+import React, { useState, useEffect } from 'react';
+import { BsFillBellFill } from 'react-icons/bs';
+import getUserProfile from '../../data/user';
+
 function Topnav() {
   const userData = JSON.parse(localStorage.getItem('userData'));
-  const phn = userData.phoneNumber
+  const phn = userData.phoneNumber;
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    const phn = userData.phoneNumber;
-
     // Use async/await to handle the promise
     const fetchUserProfile = async () => {
       try {
@@ -22,16 +20,23 @@ function Topnav() {
 
     fetchUserProfile();
   }, []);
-  console.log("topnav",user)
-  return (
-    <div>
-      <h3 className='ml-4 mt-7'>Hi,</h3>
+
+  console.log("topnav", user);
+
+  // If user is not null, render the top nav with user details
+  if (user) {
+    return (
+      <div className='bg-gray-50 opacity-90 rounded-b-xl mt-0 gap-3'>
+        <h3 className='ml-4 text-green-700 pt-3 font-bold'>Hi,</h3>
         <div className='flex flex-row '>
-        <h2 className='text-[#43C59D] text-2xl ml-3.5 font-semibold'>{user?user.name:'user'}</h2>
-       <BsFillBellFill className='ml-auto mr-5 text-[#43C59D] text-2xl'/>
-       </div> 
-    </div>
-  )
+          <h2 className='text-green-700 text-xl ml-3.5 font-bold mt-1 mb-5'>{user.name ? user.name.toUpperCase() : 'user'}</h2>
+        </div>
+      </div>
+    );
+  } else {
+    // If user is null, render nothing (or a loading indicator)
+    return null;
+  }
 }
 
-export default Topnav
+export default Topnav;

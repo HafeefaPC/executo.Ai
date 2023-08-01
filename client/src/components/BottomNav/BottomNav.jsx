@@ -16,8 +16,8 @@ export default function BottomNav() {
     const path = location.pathname;
     if (path === '/home') {
       setValue('home');
-    } else if (path === '/check') {
-      setValue('check');
+    } else if (path === '/goals') {
+      setValue('goals');
     } else if (path === '/chatroom') {
       setValue('Message');
     } else if (path === '/profile') {

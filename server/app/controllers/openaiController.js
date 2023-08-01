@@ -42,8 +42,8 @@ async function saveTaskInDatabase(task, goalID, day) {
 
 async function createGoalInDatabase(goal, day, userId) {
   return new Promise((resolve, reject) => {
-    const selectSql = 'SELECT id FROM goals WHERE goal_name = ?'
-    const selectValues = [goal]
+    const selectSql = 'SELECT id FROM goals WHERE goal_name = ? AND user_id = ?'
+    const selectValues = [goal,userId]
 
     connection.query(selectSql, selectValues, (selectError, selectResults) => {
       if (selectError) {

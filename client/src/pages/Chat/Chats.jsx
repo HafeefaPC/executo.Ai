@@ -18,8 +18,7 @@ function Chats() {
   console.log("chatroomName", roomId)
 
   useEffect(() => {
-    // Call the getUserProfile function and pass the phoneNumber as an argument
-    const phoneNumber = '+919999999999'; // Replace with the actual phone number
+    // Call the getUserProfile function and pass the phoneNumber as an argument // Replace with the actual phone number
     async function getUserProfile(phoneNumber) {
       try {
         const response = await axios.get('http://localhost:3000/readuser', {
@@ -35,7 +34,7 @@ function Chats() {
       }
     }
 
-    getUserProfile(phoneNumber);
+    getUserProfile(phn);
   }, []);
   console.log("userrrrrrrrr",user)
 

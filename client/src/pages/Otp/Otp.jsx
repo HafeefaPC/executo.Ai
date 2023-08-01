@@ -23,7 +23,7 @@ function Otp({ handleLoginchange,phoneNumber }) {
     })
       .then(response => {
         if (response.ok) {
-          navigate('/home')
+          navigate('/userdetails')
           console.log('OTP verification succeeded');
         } else {
           // OTP verification failed, do something

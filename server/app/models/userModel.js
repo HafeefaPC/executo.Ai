@@ -17,6 +17,21 @@ function getUserByPhoneNumber(phoneNumber) {
   });
 }
 
+const deleteUserById = (userId) => {
+  return new Promise((resolve, reject) => {
+    const deleteQuery = 'DELETE FROM users WHERE id = ?';
+    connection.query(deleteQuery, [userId], (error, result) => {
+      if (error) {
+        console.error('Error deleting user:', error);
+        reject(error);
+      } else {
+        resolve(result.affectedRows > 0);
+      }
+    });
+  });
+};
+
+
 function insertUser(phoneNumber) {
   return new Promise((resolve, reject) => {
     const userQuery = 'INSERT INTO users (phone_number) VALUES (?)';
@@ -42,7 +57,19 @@ function updateUserDetails(name, email, phoneNumber) {
     });
   });
 }
-
+const updateUserAbout = (userId, about) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE users SET about = ? WHERE id = ?';
+    connection.query(sql, [about, userId], (err, result) => {
+      if (err) {
+        console.error('Error updating user about:', err);
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
 
 
 
@@ -50,5 +77,7 @@ function updateUserDetails(name, email, phoneNumber) {
 module.exports = {
   getUserByPhoneNumber,
   insertUser,
-  updateUserDetails
+  updateUserDetails,
+  deleteUserById,
+  updateUserAbout
 };

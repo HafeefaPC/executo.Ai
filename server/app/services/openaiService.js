@@ -2,10 +2,11 @@ const { Configuration, OpenAIApi } = require("openai");
 require('dotenv').config();
 
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-async function callOpenAI(goal,day) {
+
+async function callOpenAI(goal, day) {
   try {
     const prompt = `i'm tryin to do ${goal} in ${day} days  give me the whole plan for ${day} days with each day containing 3 tasks , it should be in a json format. Give me the stringified json output without any explanation
     I'm repeating again, I don't need any explanation,it should be in the stringifed json format`
@@ -13,7 +14,7 @@ async function callOpenAI(goal,day) {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt,
-      max_tokens:2048 ,
+      max_tokens: 2048,
       temperature: 0,
       // stream: true
     });

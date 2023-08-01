@@ -35,6 +35,8 @@ app.post('/messages', chatController.sendMessage);
 app.get('/tasks', goalsController.getTasksForGoal)
 app.delete('/messages', chatController.exitChatroom)
 app.put('/goalday', goalsController.updateCompletedDaysForGoal)
+app.put('/updateUser', userDetailController.updateAbout)
+app.delete('/deleteUser',userDetailController.deleteUser)
 
 // Socket.io setup
 

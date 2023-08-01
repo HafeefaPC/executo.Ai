@@ -28,9 +28,45 @@ async function readUserDetails(req,res){
   } catch (error) {
     console.error('Error fetching user details:', error);
     res.status(500).json({ error: 'Failed to fetch user details' });
+
+
   }
 }
+
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.query.id;
+    console.log("useriddelete user",userId)
+    // Call the deleteUserById function from the model
+    const deletedUser = await userModel.deleteUserById(userId);
+    if (deletedUser) {
+      return res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+      return res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const updateAbout = (req, res) => {
+  const { id, about } = req.body;
+
+  // Call the userModel function to update the 'about' field
+  userModel.updateUserAbout(id, about, (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error updating user about' });
+    }
+    res.json({ message: 'User about updated successfully' });
+  });
+};
+
+
+
 module.exports = {
   saveUserDetails,
-  readUserDetails
+  readUserDetails,
+  deleteUser,
+  updateAbout
 };

@@ -3,11 +3,11 @@ import axios from 'axios';
 import Taskbox from '../../components/Taskbox/Taskbox';
 import BottomNav from '../../components/BottomNav/BottomNav';
 import Topnav from '../../components/Topnav/Topnav';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function Goals() {
 
-  const [goals,setGoals] = useState(null);
+  const [goals, setGoals] = useState(null);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('userData'));
@@ -40,18 +40,20 @@ function Goals() {
   return (
     <div>
       <Topnav />
+      <h2 className='font-bold text-green-800 text-2xl ml-5 mt-8'>Your Goals</h2>
       <div className="grid grid-cols-2 gap-2 mt-4">
         {goals ? (
           goals.map((goal) => (
             <div key={goal.id}>
-            <Link to={`/taskpage1/${goal.id}?goal=${JSON.stringify(goal)}`} className="link">
-                <Taskbox
-                  goalName={goal.goal_name}
-                  completed={goal.days_completed}
-                  userId={goal.user_id}
-                  className="mt-4"
-                />
-              </Link>
+                <Link to={`/taskpage1/${goal.id}?goal=${JSON.stringify(goal)}`} className="link">
+                  <Taskbox
+                    goalName={goal.goal_name}
+                    completed={goal.days_completed}
+                    userId={goal.user_id}
+                    day={goal.duration}
+                    className="mt-4"
+                  />
+                </Link>
             </div>
           ))
         ) : (

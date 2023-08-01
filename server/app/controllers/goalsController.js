@@ -45,11 +45,11 @@ async function getTasksForGoal(req, res) {
   try {
     const goalId = req.query.goalId;
     const currentDayOrder = req.query.day; // You can pass the current day order as a parameter
-    console.log("goaldId",goalId)
+    console.log("goaldId", goalId)
 
     // Fetch tasks for the specific goal and day order
     const tasks = await taskModel.getTasksByGoalIdAndDayOrder(goalId, currentDayOrder);
-    console.log("tasks",tasks)
+    console.log("tasks", tasks)
 
     // Handle the retrieved tasks as needed
     res.status(200).json({ tasks });
@@ -63,7 +63,7 @@ async function getTasksForGoal(req, res) {
 
 async function updateCompletedDaysForGoal(req, res) {
   try {
-    const {goalId,day} = req.body// Assuming you are passing the goalId as a route parameter
+    const { goalId, day } = req.body// Assuming you are passing the goalId as a route parameter
 
     // Assuming you want to update the 'completed_days' field in the goal document in the database
     // Retrieve the current goal data from the database
@@ -76,7 +76,7 @@ async function updateCompletedDaysForGoal(req, res) {
 
     const currentDayOrder = day;
     // Save the updated goal document to the database
-    const updatedGoal = await goalModel.updateGoal(goalId,1);
+    const updatedGoal = await goalModel.updateGoal(goalId, 1);
     const tasks = await taskModel.getTasksByGoalIdAndDayOrder(goalId, currentDayOrder);
 
     // Check if tasks were found for the given goal and day
